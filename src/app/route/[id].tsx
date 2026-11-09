@@ -10,6 +10,7 @@ import { Button } from "@/components/button";
 import { DetailScreen } from "@/components/detail-screen";
 import { FeedStatus } from "@/components/feed-status";
 import { BusGlyph } from "@/components/glyphs";
+import { toolbarStar } from "@/components/icon";
 import { RouteBadge } from "@/components/route-badge";
 import { SkeletonList } from "@/components/skeleton";
 import { Empty } from "@/components/state";
@@ -59,7 +60,7 @@ export default function RouteScreen() {
       {data && (
         <Stack.Toolbar placement="right">
           <Stack.Toolbar.Button
-            icon={saved ? "star.fill" : "star"}
+            icon={toolbarStar(saved)}
             tintColor={p.text}
             accessibilityLabel={saved ? t.route.unsave : t.route.save}
             onPress={save}

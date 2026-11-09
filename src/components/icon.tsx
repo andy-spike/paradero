@@ -3,18 +3,30 @@ import type { ColorValue } from "react-native";
 
 import { size as sizes } from "@/theme/tokens";
 
+import { androidSymbolWeight, type Weight } from "./symbol-weights";
+
 type Name = Extract<SymbolViewProps["name"], { ios?: unknown }>;
 
 interface IconProps {
   name: Name;
   color: ColorValue;
   size?: keyof typeof sizes.icon;
-  weight?: "regular" | "medium" | "semibold" | "bold";
+  weight?: Weight;
 }
 
 export function Icon({ name, color, size = "md", weight = "semibold" }: IconProps) {
   const side = sizes.icon[size];
-  return <SymbolView name={name} size={side} tintColor={color} weight={weight} resizeMode="scaleAspectFit" style={{ width: side, height: side }} />;
+  // A filled SF Symbol gets the filled Material face, so a saved star still looks different from an empty one on Android.
+  const filled = String(name.ios).endsWith(".fill");
+  const android = androidSymbolWeight(weight, filled);
+  // On Android, SymbolView loads its font once on mount, so a new face (outline to filled, or another weight) needs a fresh mount to load.
+  return <SymbolView key={`${weight}-${filled}`} name={name} size={side} tintColor={color} weight={android ? { ios: weight, android } : weight} resizeMode="scaleAspectFit" style={{ width: side, height: side }} />;
+}
+
+/** The save star for a header toolbar: an SF Symbol on iOS, and on Android a Material Symbols image, since its toolbar only takes images. */
+export function toolbarStar(filled: boolean) {
+  if (process.env.EXPO_OS === "ios") return filled ? "star.fill" : "star";
+  return filled ? require("@/assets/images/toolbar/star-fill.png") : require("@/assets/images/toolbar/star.png");
 }
 
 export const icons = {

@@ -11,7 +11,7 @@ import { Chip } from "@/components/chip";
 import { DetailScreen } from "@/components/detail-screen";
 import { ArrivalRow } from "@/components/arrival-row";
 import { FeedStatus } from "@/components/feed-status";
-import { Icon, icons } from "@/components/icon";
+import { Icon, icons, toolbarStar } from "@/components/icon";
 import { NextBus } from "@/components/next-bus";
 import { RouteBadge } from "@/components/route-badge";
 import { RouteRow } from "@/components/route-row";
@@ -57,7 +57,7 @@ export default function StopScreen() {
       {data && (
         <Stack.Toolbar placement="right">
           <Stack.Toolbar.Button
-            icon={saved ? "star.fill" : "star"}
+            icon={toolbarStar(saved)}
             tintColor={p.text}
             accessibilityLabel={saved ? t.stop.unsave : t.stop.save}
             onPress={save}
